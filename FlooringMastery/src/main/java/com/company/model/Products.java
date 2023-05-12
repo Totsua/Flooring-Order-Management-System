@@ -21,30 +21,21 @@ public class Products {
         allProducts.put(productType, this);
     }
 
-    // Getters and Setters
+    // Getters no Setters, Products are a READ ONLY file
 
     public String getProductType() {
         return productType;
     }
 
-    public void setProductType(String productType) {
-        this.productType = productType;
-    }
 
     public BigDecimal getCostPerSqFoot() {
         return costPerSqFoot;
     }
 
-    public void setCostPerSqFoot(BigDecimal costPerSqFoot) {
-        this.costPerSqFoot = costPerSqFoot;
-    }
+
 
     public BigDecimal getLabourCostPerSqFoot() {
-        return labourCostPerSqFoot.setScale(2, RoundingMode.HALF_UP);
-    }
-
-    public void setLabourCostPerSqFoot(BigDecimal labourCostPerSqFoot) {
-        this.labourCostPerSqFoot = labourCostPerSqFoot.setScale(2, RoundingMode.HALF_UP);
+        return labourCostPerSqFoot;
     }
 
     // toString

@@ -1,25 +1,22 @@
 package com.company;
 
 import com.company.dao.*;
-import com.company.model.Products;
-import com.company.model.StateTaxes;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-
-import static com.company.model.Products.allProducts;
-import static com.company.model.StateTaxes.allStateTaxes;
 import com.company.controller.FlooringMasteryController;
-import com.company.view.ProductView;
+import com.company.service.ProductServiceLayer;
+import com.company.service.ProductServiceLayerImpl;
+import com.company.view.ObjectView;
 
 public class App {
-    public static void main(String[] args) throws ProductPersistenceException {
-        ProductDao prodDao= new ProductDaoFileImpl();
-        ProductDaoFileImpl trueDao = new ProductDaoFileImpl();
-        ProductServiceLayer myService = new ProductServiceLayerImpl(prodDao);
-        ProductView myView  = new ProductView();
-        FlooringMasteryController floor = new FlooringMasteryController(myService, myView);
-        floor.run();
+    public static void main(String[] args) throws FilePersistenceException {
+        ProductDAO prodDao= new ProductDAOFileImpl();
+        StateTaxesDAO taxDAO = new StateTaxesDaoFileImpl();
+        ProductDAOFileImpl trueDao = new ProductDAOFileImpl();
+        ProductServiceLayer myService = new ProductServiceLayerImpl(prodDao, taxDAO);
+        //ObjectView myView  = new ObjectView();
+       // FlooringMasteryController floor = new FlooringMasteryController(myService, myView);
+        //floor.run();
+        //System.out.println(getAllStateTax);
 
 
        /* Products product = new Products("Mongo", "1.00", "5.20");

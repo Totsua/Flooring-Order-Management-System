@@ -1,7 +1,7 @@
 package com.company.view;
 import java.util.Scanner;
 
-// Console Implementation from Wiley
+// Console Implementation from Wiley Class Roster Exercise
 
     /*********************************
      * The Software Guild

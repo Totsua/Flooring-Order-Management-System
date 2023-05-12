@@ -17,6 +17,7 @@ public class StateTaxes {
         this.stateName = stateName;
         // For all numbers, we need to set the scale for BigDecimal variables to 2
         this.stateTaxRate = new BigDecimal(stateTaxRate).setScale(2,RoundingMode.HALF_UP);
+        // Place them into the allStateTaxes Map
         allStateTaxes.put(stateAlphaCode, this);
     }
 

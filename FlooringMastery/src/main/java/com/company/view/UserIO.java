@@ -1,5 +1,6 @@
 package com.company.view;
 
+// Wiley's UserIO - Taken from ClassRoster Exercise
 public interface UserIO {
     void print(String msg);
     double readDouble(String prompt);
