@@ -22,11 +22,47 @@ public  FlooringMasteryController(ProductServiceLayer service, ObjectView view){
     this.service = service;
 }
 
-public void run() throws FilePersistenceException {
-    viewProducts();
-    viewTaxes();
-    System.out.println();
+public void run(){
+    boolean stayOn = true;
+    int MenuChoice = 0;
+    try{
+        while(stayOn){
+            MenuChoice = getMenuSelect();
+            switch (MenuChoice){
+                case 1:
+                    viewTaxes();
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    exportMessage();
+                    break;
+                case 6:
+                    stayOn = false;
+                    break;
+                default:
+                    unknownCommand();
+                    break;
+            }
+        }
+         exitMessage();
+    }catch (FilePersistenceException e){
+        view.displayErrorMessage(e.getMessage());
+    }
 }
+
+    private int getMenuSelect() {return view.PrintMenuAndGetChoice();}
+
+
+    private void unknownCommand(){view.displayUnknownCommandMessage();}
+    private void exitMessage(){view.displayExitMessage();}
+    private void exportMessage(){view.displayExportMessage();}
+
+
 
    private void viewProducts() throws FilePersistenceException {
        List<Products>  ProductList = service.getAllProducts();

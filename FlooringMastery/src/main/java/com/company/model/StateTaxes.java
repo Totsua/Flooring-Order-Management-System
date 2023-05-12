@@ -23,6 +23,7 @@ public class StateTaxes {
 
     // Getters - Taxes is a READ ONLY file that won't be modified
     // So we only need Getters no Setters
+    // Potentially may need Setters for Orders?
 
     public String getStateAlphaCode() {
         return stateAlphaCode;

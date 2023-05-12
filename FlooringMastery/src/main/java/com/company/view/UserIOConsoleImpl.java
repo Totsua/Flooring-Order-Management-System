@@ -1,4 +1,5 @@
 package com.company.view;
+import java.math.BigDecimal;
 import java.util.Scanner;
 
 // Console Implementation from Wiley Class Roster Exercise
@@ -68,7 +69,7 @@ public class UserIOConsoleImpl implements UserIO {
                     invalidInput = false; // or you can use 'break;'
                 } catch (NumberFormatException e) {
                     // If it explodes, it'll go here and do this.
-                    this.print("Input error. Please try again.");
+                    this.print("Input Error. Please Try Again.");
                 }
             }
             return num;
@@ -110,7 +111,7 @@ public class UserIOConsoleImpl implements UserIO {
                 try {
                     return Long.parseLong(this.readString(msgPrompt));
                 } catch (NumberFormatException e) {
-                    this.print("Input error. Please try again.");
+                    this.print("Input Error. Please Try Again.");
                 }
             }
         }
@@ -150,7 +151,7 @@ public class UserIOConsoleImpl implements UserIO {
                 try {
                     return Float.parseFloat(this.readString(msgPrompt));
                 } catch (NumberFormatException e) {
-                    this.print("Input error. Please try again.");
+                    this.print("Input Error. Please Try Again.");
                 }
             }
         }
@@ -191,7 +192,7 @@ public class UserIOConsoleImpl implements UserIO {
                 try {
                     return Double.parseDouble(this.readString(msgPrompt));
                 } catch (NumberFormatException e) {
-                    this.print("Input error. Please try again.");
+                    this.print("Input Error. Please Try Again.");
                 }
             }
         }
