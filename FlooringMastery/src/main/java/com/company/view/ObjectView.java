@@ -1,5 +1,6 @@
 package com.company.view;
 
+import com.company.model.Orders;
 import com.company.model.Products;
 import com.company.model.StateTaxes;
 
@@ -14,11 +15,11 @@ public class ObjectView {
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         io.print("* <<Flooring Program>>");
         io.print("* 1. Display Orders");
-        io.print("2. Add an Order");
-        io.print("3. Edit an Order");
-        io.print("4. Remove an Order");
-        io.print("5. Export All Data");
-        io.print("6. Quit");
+        io.print("* 2. Add an Order");
+        io.print("* 3. Edit an Order");
+        io.print("* 4. Remove an Order");
+        io.print("* 5. Export All Data");
+        io.print("* 6. Quit");
         io.print("*");
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
         return  io.readInt("Please input an option [1-6]", 1,6);
@@ -47,6 +48,21 @@ public class ObjectView {
         io.print("******Feature Locked******");
         io.print("Please Wait Until The Next Patch");
     }
+
+    public void displayOrders(List<Orders> orderList){
+        for (Orders order: orderList){
+           // String orderInfo = String.format("Order No.%s, Customer: %s, State: %s, TaxRate: %s ls@  ")
+            System.out.println("Order No."+order.getOrderNumber()+ ", Customer: "+ order.getCustomerName()+ ", State: "+order.getState()+
+                    ", TaxRate: "+order.getStateTaxRate()+ "%, Product: " +order.getProductType()+", " +
+                    "Area: "+order.getArea()+"SqFt, CostPerSqFt: $"+order.getCostPerSqFoot()+
+                    ", LabourCostPerSqFt: $"+order.getLabourPerSqFoot()+", MaterialCost: $"+order.getMaterialCost()+
+                    ", LabourCost: $"+order.getLabourCost()+", Tax: $"+order.getTax()+", Total:$"+order.getTotal());
+                    //nteger orderNumber, String customerName, String state, BigDecimal stateTaxRate,
+            //                  String productType, BigDecimal area, BigDecimal costPerSqFoot, BigDecimal labourPerSqFoot,
+            //                  BigDecimal materialCost, BigDecimal labourCost, BigDecimal total)
+        }
+    }
+
 
     //Unnecessary for now
     public void displayProductList(List<Products> productsList) {

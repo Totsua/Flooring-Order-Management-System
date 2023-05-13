@@ -14,8 +14,8 @@ public class App {
         UserIO myIo = new UserIOConsoleImpl();
         ProductDAO prodDao= new ProductDAOFileImpl();
         StateTaxesDAO taxDAO = new StateTaxesDaoFileImpl();
-        ProductDAOFileImpl trueDao = new ProductDAOFileImpl();
-        ProductServiceLayer myService = new ProductServiceLayerImpl(prodDao, taxDAO);
+        OrdersDAO ordersDAO = new OrdersDAOFileImpl();
+        ProductServiceLayer myService = new ProductServiceLayerImpl(prodDao, taxDAO,ordersDAO );
         ObjectView myView  = new ObjectView(myIo);
         FlooringMasteryController floor = new FlooringMasteryController(myService, myView);
         floor.run();
