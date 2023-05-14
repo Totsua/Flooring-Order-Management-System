@@ -18,7 +18,6 @@ public class Orders {
     private BigDecimal labourCost;
     private BigDecimal tax;
     private BigDecimal total;
-    private String orderDate;
     public static Map <String, Orders> allOrdersPerDate = new HashMap<>();
 
     // Constructor
@@ -141,11 +140,22 @@ public class Orders {
         this.total = total;
     }
 
-    public String getOrderDate() {
-        return orderDate;
-    }
 
-    public void setOrderDate(String orderDate) {
-        this.orderDate = orderDate;
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "orderNumber=" + orderNumber +
+                ", customerName='" + customerName + '\'' +
+                ", state='" + state + '\'' +
+                ", stateTaxRate=" + stateTaxRate +
+                ", productType='" + productType + '\'' +
+                ", area=" + area +
+                ", costPerSqFoot=" + costPerSqFoot +
+                ", labourPerSqFoot=" + labourPerSqFoot +
+                ", materialCost=" + materialCost +
+                ", labourCost=" + labourCost +
+                ", tax=" + tax +
+                ", total=" + total +
+                '}';
     }
 }

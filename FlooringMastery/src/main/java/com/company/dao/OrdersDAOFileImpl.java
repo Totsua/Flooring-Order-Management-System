@@ -55,6 +55,32 @@ public class OrdersDAOFileImpl implements OrdersDAO {
         return fileName;
     }
 
+    @Override
+    public void newOrderSameFile (Orders order, String date) throws FilePersistenceException{
+        //String fileName = createFileName(date);
+        String[] splitDate = date.split(DELIMITER);
+        String month = splitDate[0];
+        String day = splitDate[1];
+        String year = splitDate[2];
+        String dateFormat = month + day + year;
+        String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_" + dateFormat + ".txt";
+        //writeOrders(fileName);
+        readOrders(fileName);
+        allDateOrders.put(order.getOrderNumber(), order);
+        PrintWriter out;
+
+        try {
+            out = new PrintWriter(new FileWriter(fileName));
+        } catch (IOException e) {
+            throw new FilePersistenceException("Could Not Save Order Data", e);
+        }
+            // Write the title line first into the file
+            out.println(FILETITLELINE);
+            // Force PrintWriter to write the line to the file
+            out.flush();
+        out.close();
+        writeOrders(fileName);
+    }
 
     // Method to read the Orders from a file
     public void readOrders(String fileName) throws FilePersistenceException {
@@ -97,12 +123,8 @@ public class OrdersDAOFileImpl implements OrdersDAO {
         String orderAsText;
         List<Orders> allOrders = this.getAllOrders();
         for (Orders order : allOrders) {
-            System.out.println(order.getState());
             // Turn order into a string
             orderAsText = marshallOrder(order);
-
-            // Write the title line first
-            out.println(FILETITLELINE);
             // Write the Order into the file
             out.println(orderAsText);
             // Force PrintWriter to write the line to the file

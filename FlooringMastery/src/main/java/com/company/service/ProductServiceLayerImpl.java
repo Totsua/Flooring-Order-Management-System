@@ -78,7 +78,17 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         }
         BigDecimal trueArea = new BigDecimal(area);
         if(exists){
-            System.out.println("Hmmm");
+            int orderNumber = 0;
+            List<Orders> ordersList = getAllOrders(date);
+            for (Orders order: ordersList){
+                if (order.getOrderNumber() > orderNumber){
+                    orderNumber = order.getOrderNumber();
+                }
+            }
+            orderNumber++;
+            Orders newOrder = new Orders( orderNumber,name, state, stateTaxRate, product, trueArea, costPerSqFt, labourPerSqFt,
+                    materialCost, labourCost, tax, total);
+            dao3.newOrderSameFile(newOrder,date);
         }
         else{
             Orders newOrder = new Orders( 1,name, state, stateTaxRate, product, trueArea, costPerSqFt, labourPerSqFt,
@@ -149,7 +159,7 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
             }
         }
         BigDecimal trueArea = new BigDecimal(area);
-        BigDecimal materialCost = trueArea.multiply(costPerSqFt);
+        BigDecimal materialCost = trueArea.multiply(costPerSqFt).setScale(2,RoundingMode.HALF_UP);
         return materialCost;
 
     }
@@ -165,7 +175,7 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         }
 
         BigDecimal trueArea = new BigDecimal(area);
-        BigDecimal labourCost = trueArea.multiply(labourCostPerSqFt);
+        BigDecimal labourCost = trueArea.multiply(labourCostPerSqFt).setScale(2,RoundingMode.HALF_UP);
         return labourCost;
     }
 
@@ -175,7 +185,7 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         List<StateTaxes> allStateTax = getAllStateTaxes();
         for(StateTaxes states: allStateTax){
             if(state.equals(states.getStateAlphaCode())){
-                tax =tax.multiply(states.getStateTaxRate()).setScale(2);
+                tax =tax.multiply(states.getStateTaxRate()).setScale(2,RoundingMode.HALF_UP);
             }
         }
         tax = tax.divide(BigDecimal.valueOf(100.00)).setScale(2,RoundingMode.HALF_UP);
