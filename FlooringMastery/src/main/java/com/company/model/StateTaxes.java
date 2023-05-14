@@ -37,6 +37,10 @@ public class StateTaxes {
         return stateTaxRate;
     }
 
+    public static Map<String, StateTaxes> getAllStateTaxes() {
+        return allStateTaxes;
+    }
+
     @Override
     public String toString() {
         return "StateTaxes{" +

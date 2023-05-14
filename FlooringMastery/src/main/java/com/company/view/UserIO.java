@@ -18,5 +18,7 @@ public interface UserIO {
     String readMonth(String prompt, int min, int max);
     String readYear(String prompt);
     boolean readChoice(String prompt);
-    String readDate(String date);
+    String readName (String prompt);
+    double readDouble(String prompt, double min);
+
 }

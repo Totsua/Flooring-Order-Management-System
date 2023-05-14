@@ -5,6 +5,9 @@ import com.company.model.Orders;
 import com.company.model.Products;
 import com.company.model.StateTaxes;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -34,11 +37,56 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         return dao2.getAllStateTax();
     }
 
-    // Method to get all dates from certain date
+    // Method to get all orders from certain date
     @Override
     public List<Orders> getAllOrders(String date) throws FilePersistenceException {
         return dao3.getAllOrders(date);
     }
+
+    @Override
+    public boolean createFileExists(String date)throws FilePersistenceException{
+        boolean exist = dao3.createFileExists(date);
+        return exist;
+    }
+
+    // Creating a new Orders Object -
+    // (Would have been easier to Overload the Orders method to take less and set the other variables that way)
+    @Override
+    public void createNewOrder(String name, String state, String product, Double area, BigDecimal materialCost,
+                               BigDecimal labourCost, BigDecimal tax, BigDecimal total, String date, boolean exists)
+            throws FilePersistenceException
+    {
+        BigDecimal stateTaxRate = null;
+        BigDecimal costPerSqFt = null;
+        BigDecimal labourPerSqFt = null;
+        List<Products> productList = getAllProducts();
+        List<StateTaxes> allStateTax = getAllStateTaxes();
+
+        for(StateTaxes states: allStateTax){
+            if(state.equals(states.getStateAlphaCode())){
+                stateTaxRate =states.getStateTaxRate();
+            }
+        }
+        for(Products products : productList){
+            if (product.equals(products.getProductType())){
+                costPerSqFt = products.getCostPerSqFoot();
+                labourPerSqFt = products.getLabourCostPerSqFoot();
+            }
+        }
+        BigDecimal trueArea = new BigDecimal(area);
+        if(exists){
+            System.out.println("Hmmm");
+        }
+        else{
+            Orders newOrder = new Orders( 1,name, state, stateTaxRate, product, trueArea, costPerSqFt, labourPerSqFt,
+                    materialCost, labourCost, tax, total);
+            dao3.newOrderNewFile(newOrder,date);
+        }
+
+    }
+
+
+
 
     // Method to check if the date inputted is a valid date
     @Override
@@ -55,4 +103,86 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         return isValid;
     }
 
+    @Override
+    public boolean pastDate(String date) throws DateTimeException{
+        DateTimeFormatter format = DateTimeFormatter.ofPattern("MM-d-uuuu").withResolverStyle(ResolverStyle.STRICT);
+        LocalDate dateInQuestion = LocalDate.parse(date,format);
+       boolean inPast = dateInQuestion.isBefore(LocalDate.now());
+       if(inPast){
+           System.out.println("Invalid Input. Date in the past.");
+       }
+        return inPast;
+    }
+
+    @Override
+    public boolean validateState(String state) throws FilePersistenceException{
+        boolean isValid = dao2.validateState(state);
+        if (!isValid){
+            System.out.println("Invalid Input. State Code Not Found.");
+        }
+        return isValid;
+    }
+
+    @Override
+    public boolean validateProduct(String product) throws FilePersistenceException{
+        boolean isValid = dao.validateProduct(product);
+        if (!isValid){
+            System.out.println("Input Error. Product Not Found.");
+            System.out.println("Please Input The Product As Shown.");
+        }
+        return isValid;
+    }
+
+    @Override
+    public BigDecimal materialCost(double area,String product) throws FilePersistenceException {
+        List<Products> productList = getAllProducts();
+        BigDecimal costPerSqFt = null;
+        for(Products products : productList){
+            if (product.equals(products.getProductType())){
+                costPerSqFt = products.getCostPerSqFoot();
+            }
+        }
+        BigDecimal trueArea = new BigDecimal(area);
+        BigDecimal materialCost = trueArea.multiply(costPerSqFt);
+        return materialCost;
+
+    }
+
+    @Override
+    public BigDecimal labourCost(double area, String product) throws FilePersistenceException {
+        List<Products> productList = getAllProducts();
+        BigDecimal labourCostPerSqFt = null;
+
+        for (Products products: productList){
+            if (product.equals(products.getProductType())){
+                labourCostPerSqFt = products.getLabourCostPerSqFoot();}
+        }
+
+        BigDecimal trueArea = new BigDecimal(area);
+        BigDecimal labourCost = trueArea.multiply(labourCostPerSqFt);
+        return labourCost;
+    }
+
+    @Override
+    public BigDecimal tax (BigDecimal materialCost, BigDecimal labourCost, String state) throws FilePersistenceException{
+        BigDecimal tax= materialCost.add(labourCost);
+        List<StateTaxes> allStateTax = getAllStateTaxes();
+        for(StateTaxes states: allStateTax){
+            if(state.equals(states.getStateAlphaCode())){
+                tax =tax.multiply(states.getStateTaxRate()).setScale(2);
+            }
+        }
+        tax = tax.divide(BigDecimal.valueOf(100.00)).setScale(2,RoundingMode.HALF_UP);
+        return tax;
+    }
+    @Override
+   public BigDecimal total (BigDecimal materialCost, BigDecimal labourCost, BigDecimal tax){
+        BigDecimal total = materialCost.add(labourCost).add(tax);
+        return total;
+   }
+
 }
+
+
+
+

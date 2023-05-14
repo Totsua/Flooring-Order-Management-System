@@ -7,6 +7,7 @@ import com.company.service.ProductServiceLayer;
 import com.company.model.Products;
 import com.company.view.ObjectView;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class FlooringMasteryController {
@@ -35,6 +36,7 @@ public void run(){
                     viewOrder(); // Display the Orders
                     break;
                 case 2:
+                    addOrder();
                     break;
                 case 3:
                     break;
@@ -61,13 +63,14 @@ public void run(){
     private int getMenuSelect() {return view.PrintMenuAndGetChoice();}
 
 // Main Menu Messages
-    private void unknownCommand(){view.displayUnknownCommandMessage();}
+    private void unknownCommand(){view.displayUnknownCommandMessage();view.displayPauseMessage();}
     private void exitMessage(){view.displayExitMessage();}
-    private void exportMessage(){view.displayExportMessage();}
+    private void exportMessage(){view.displayExportMessage();view.displayPauseMessage();}
 
 
 private void viewOrder() throws FilePersistenceException {
     // Ask user to input a date
+    view.displayOrdersTitle();
     String myDate= view.displayAskDate();
     // If user doesn't confirm the date, go back to the main menu.
     // If they do verify if the date is valid.
@@ -84,7 +87,54 @@ private void viewOrder() throws FilePersistenceException {
             }
         }
     }
+    view.displayPauseMessage();
 }
+
+    private void addOrder() throws FilePersistenceException {
+    boolean validState;
+    boolean validProduct;
+    boolean inPast;
+    boolean orderConfirm;
+    boolean fileExists;
+    view.displayAddOrderTitle();
+    String myDate= view.displayAskDate();
+    if (myDate!=null){
+        boolean dateValid = service.validDate(myDate);
+        if (dateValid) {
+            inPast = service.pastDate(myDate);
+            if(!inPast) {
+                String name = view.getCustomerName();
+                String state = view.getCustomerState().toUpperCase();
+                validState = service.validateState(state);
+                if (validState) {
+                    viewProducts();
+                    String product = view.getCustomerProduct();
+                    validProduct = service.validateProduct(product);
+                    if (validProduct) {
+                        Double area = view.getCustomerArea();
+
+                        // Calculations for costs, could be done in one method.
+                        // Decided to split it.
+                        BigDecimal materialCost = service.materialCost(area, product);
+                        BigDecimal labourCost = service.labourCost(area, product);
+                        BigDecimal tax = service.tax(materialCost, labourCost, state);
+                        BigDecimal total = service.total(materialCost, labourCost, tax);
+                        orderConfirm = view.displayCurrentOrder(name, state, product, area,
+                                materialCost, labourCost, tax, total);
+                        // Check if file already exists
+                        if(orderConfirm){
+                            fileExists = service.createFileExists(myDate);
+                            service.createNewOrder(name, product, state, area, materialCost,
+                                    labourCost, tax, total, myDate,fileExists);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        view.displayPauseMessage();
+    }
+
 
 
 

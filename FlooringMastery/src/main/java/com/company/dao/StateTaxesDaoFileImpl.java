@@ -50,6 +50,13 @@ public class StateTaxesDaoFileImpl implements StateTaxesDAO {
     public List<StateTaxes> getAllStateTax() throws FilePersistenceException {
         readTaxes();
       return new ArrayList<StateTaxes>(StateTaxes.allStateTaxes.values());
+    }
 
+    // Method to validate if the user inputted a valid state
+    @Override
+    public boolean validateState(String state) throws FilePersistenceException{
+        readTaxes();
+        boolean isValid = StateTaxes.getAllStateTaxes().containsKey(state);
+        return isValid;
     }
 }

@@ -48,4 +48,20 @@ public class ProductDAOFileImpl implements ProductDAO {
         readProducts();
         return new ArrayList<Products>(Products.allProducts.values());
     }
+
+    @Override
+    public boolean validateProduct(String product) throws FilePersistenceException{
+        readProducts();
+        boolean isValid = Products.allProducts.containsKey(product);
+        return isValid;
+    }
+
+    @Override
+    public Products getProduct(String product) throws FilePersistenceException {
+        readProducts();
+        System.out.println(Products.allProducts.get(product));
+        return Products.allProducts.get(product);
+
+    }
+
 }

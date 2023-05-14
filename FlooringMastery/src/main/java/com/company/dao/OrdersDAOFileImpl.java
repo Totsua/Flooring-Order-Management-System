@@ -2,9 +2,7 @@ package com.company.dao;
 
 import com.company.model.Orders;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.*;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.*;
@@ -13,22 +11,55 @@ public class OrdersDAOFileImpl implements OrdersDAO{
         private static String ORDERSFILE = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_06022013.txt";
                                                     //FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Data/Products.txt
         private static final String DELIMITER = "-";
+        private static final String FILETITLELINE ="OrderNumber,CustomerName,State,TaxRate,ProductType" +
+                                                    ",Area,CostPerSquareFoot,LaborCostPerSquareFoot," +
+                                                    "MaterialCost,LaborCost,Tax,Total";
         public Map<Integer, Orders> allDateOrders = new HashMap<>();
 
     @Override
-    public Orders addOrder(String date, Orders order) throws FilePersistenceException {
-
-
-        return null;
+    public boolean createFileExists(String date) throws FilePersistenceException {
+        String fileName = createFileName(date);
+       boolean createFile = true;
+            Scanner scanner;
+            try {
+                scanner = new Scanner(new BufferedReader(new FileReader(fileName)));
+                scanner.close();
+            } catch (FileNotFoundException e) {
+                createFile = false;
+                scanner = null;
+            }
+            return createFile;
     }
 
+   @Override
+   public void newOrderNewFile(Orders order, String date) throws FilePersistenceException{
+        allDateOrders =  this.allDateOrders;
+        allDateOrders.put(1,order);
+
+        String[] splitDate = date.split(DELIMITER);
+        String month=splitDate[0];
+        String day =splitDate[1];
+        String year =splitDate[2];
+        String dateFormat = month+day+year;
+        String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_"+dateFormat+".txt";
+        writeOrders(fileName);
+
+   }
+
+
+
     // Method to create the file name using a given date
-    public String checkOrderDate(String date){   //,boolean create{
+    public String createFileName(String date){   //,boolean create{
             String orderSplit[] = date.split("-");
             String dateFormat = orderSplit[0] + orderSplit[1] + orderSplit[2];
+            // Program seems to only read file if filepath is as the following:
             String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_"+dateFormat+".txt";
             return fileName;
         }
+
+
+
+
 
 
 
@@ -39,7 +70,7 @@ public class OrdersDAOFileImpl implements OrdersDAO{
             try {
                 scanner = new Scanner(new BufferedReader(new FileReader(fileName)));
             } catch (FileNotFoundException e) {
-                throw new FilePersistenceException("- Unable to load Orders - ORDERDATE doesn't exist");
+                throw new FilePersistenceException("- Unable To Load Orders - ORDERDATE Does Not Exist");
             }
 
             // Need a String array that will hold the inputs of each file line
@@ -60,6 +91,34 @@ public class OrdersDAOFileImpl implements OrdersDAO{
             scanner.close();
 
         }
+
+        private void writeOrders(String fileName) throws FilePersistenceException{
+                PrintWriter out;
+
+                try{
+                    out = new PrintWriter(new FileWriter(fileName));
+                } catch (IOException e){
+                    throw new FilePersistenceException("Could Not Save Order Data" , e);
+                }
+
+                String orderAsText;
+                List<Orders> allOrders = (List<Orders>) allDateOrders;
+                for (Orders order : allOrders){
+                    // Turn order into a string
+                    orderAsText= marshallOrder(order);
+
+                    // Write the title line first
+                    out.println(FILETITLELINE);
+                    // Write the Order into the file
+                    out.println(orderAsText);
+                    // Force PrintWriter to write the line to the file
+                    out.flush();
+                }
+                out.close(); //  Close the PrintWriter
+    }
+
+
+
 
         // A method to take the line from the file, split it into the appropriate variables and create an Order Object
 
@@ -95,13 +154,33 @@ public class OrdersDAOFileImpl implements OrdersDAO{
 
         }
 
+    private String marshallOrder(Orders order){
+        // This is for turning the Orders str
+        // All we need is to get out each property and concatenate with our DELIMITER as a spacer.
+
+        String delimiter = ",";
+        String orderAsString = order.getOrderNumber() + delimiter;
+        orderAsString += order.getCustomerName() + delimiter; // First Name
+        orderAsString += order.getState() + delimiter; // Last Name
+        orderAsString += order.getStateTaxRate() + delimiter;
+        orderAsString += order.getProductType() + delimiter;
+        orderAsString += order.getArea() + delimiter;
+        orderAsString += order.getCostPerSqFoot() + delimiter;
+        orderAsString += order.getLabourPerSqFoot() + delimiter;
+        orderAsString += order.getMaterialCost() + delimiter;
+        orderAsString += order.getLabourCost() + delimiter;
+        orderAsString += order.getTax() + delimiter;
+        orderAsString += order.getTotal();
+        // No need for a delimiter as cohort the last property.
+
+        return orderAsString; // Have to return the String
+    }
 
     @Override
     public List<Orders> getAllOrders(String date) throws FilePersistenceException {
-        String fileName = checkOrderDate(date);
+        String fileName = createFileName(date);
         readOrders(fileName);
         return new ArrayList<Orders>(allDateOrders.values());
     }
-
 }
 

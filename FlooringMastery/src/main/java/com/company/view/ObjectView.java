@@ -4,8 +4,7 @@ import com.company.model.Orders;
 import com.company.model.Products;
 import com.company.model.StateTaxes;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class ObjectView {
@@ -24,13 +23,16 @@ public class ObjectView {
         io.print("* 6. Quit");
         io.print("*");
         io.print("* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *");
-        return  io.readInt("Please input an option [1-6]", 1,6);
+        return  io.readInt("Please Input An Option [1-6]", 1,6);
     }
 
     // MENU MESSAGES
 
+    public void displayOrdersTitle(){
+        io.print("* * * * * * * * * * * * Display Orders * * * * * * * * * * * * * * * *");
+    }
     public String displayAskDate(){
-        io.print("What is the date of the order:");
+        io.print("What Is The Date Of The Order:");
         String day = io.readDay("Please input the day of the order (DD): ",1,31);
         String month = io.readMonth("Please input the month of the order (MM): ", 1,12);
         String year = io.readYear("Please input the year of the order (YYYY): ");
@@ -44,6 +46,20 @@ public class ObjectView {
 
     }
 
+    public void displayAddOrderTitle(){
+        io.print("* * * * * * * * * * * * * * Add An Order * * * * * * * * * * * * * * *");
+    }
+    public String getCustomerName(){return io.readName("Please Enter Your Name");}
+    public String getCustomerState(){return io.readString("Please Enter The Alpha Code Of Your State: ");}
+    public String getCustomerProduct(){return io.readString("Please Enter The Product You Want: ");}
+    public Double getCustomerArea(){return io.readDouble("Please Enter The Area In SqFt (Min 100)",100);}
+    public boolean displayCurrentOrder(String name, String state, String product, Double area, BigDecimal materialCost,
+                               BigDecimal labourCost, BigDecimal tax, BigDecimal total){
+        System.out.println("Customer: " +name+", State: "+state+", Product: "+product+", Area: "+area+
+                "SqFt, MaterialCost: $"+materialCost+ ", LabourCost: $"+labourCost+", Tax: $"+tax+
+                "\n + Total: $" +total);
+        return io.readChoice("Do You Want To Place The Order?");
+    }
 
 
     // "Quit" menu option message
@@ -67,6 +83,9 @@ public class ObjectView {
         io.print("* * * * * * Feature Locked * * * * * *");
         io.print("Please Wait Until The Next Patch");
     }
+    public void displayPauseMessage(){
+        io.readString("Please Press Enter To Continue.");
+    }
 
     // Method to read through the order list, format it and display it
     public void displayOrders(List<Orders> orderList){
@@ -79,8 +98,6 @@ public class ObjectView {
         }
     }
 
-
-    //Unnecessary for now
     public void displayProductList(List<Products> productsList) {
         for (Products product : productsList) {
             String productInfo = String.format("Product: %s, CostPerSqFoot: $%s, LabourCostPerSqFoot: $%s",
