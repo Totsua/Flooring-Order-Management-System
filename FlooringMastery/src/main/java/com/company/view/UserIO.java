@@ -13,4 +13,10 @@ public interface UserIO {
     long readLong(String prompt, long min, long max);
     String readString(String prompt);
 
+    // Own Methods
+    String readDay(String prompt, int min, int max);
+    String readMonth(String prompt, int min, int max);
+    String readYear(String prompt);
+    boolean readChoice(String prompt);
+    String readDate(String date);
 }

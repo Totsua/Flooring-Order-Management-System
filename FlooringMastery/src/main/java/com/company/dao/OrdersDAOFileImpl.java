@@ -1,7 +1,6 @@
 package com.company.dao;
 
 import com.company.model.Orders;
-import com.company.model.Products;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,20 +10,34 @@ import java.math.RoundingMode;
 import java.util.*;
 
 public class OrdersDAOFileImpl implements OrdersDAO{
-        private static final String ORDERSFILE = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_06022013.txt";
+        private static String ORDERSFILE = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_06022013.txt";
                                                     //FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Data/Products.txt
-        private static final String DELIMITER = ",";
+        private static final String DELIMITER = "-";
         public Map<Integer, Orders> allDateOrders = new HashMap<>();
+
+    @Override
+    public Orders addOrder(String date, Orders order) throws FilePersistenceException {
+
+
+        return null;
+    }
+
+    // Method to create the file name using a given date
+    public String checkOrderDate(String date){   //,boolean create{
+            String orderSplit[] = date.split("-");
+            String dateFormat = orderSplit[0] + orderSplit[1] + orderSplit[2];
+            String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_"+dateFormat+".txt";
+            return fileName;
+        }
 
 
 
         // Method to read the Orders from a file
-    public void readOrders() throws FilePersistenceException {
+    public void readOrders(String fileName) throws FilePersistenceException {
             Scanner scanner;
 
-
             try {
-                scanner = new Scanner(new BufferedReader(new FileReader(ORDERSFILE)));
+                scanner = new Scanner(new BufferedReader(new FileReader(fileName)));
             } catch (FileNotFoundException e) {
                 throw new FilePersistenceException("- Unable to load Orders - ORDERDATE doesn't exist");
             }
@@ -84,9 +97,11 @@ public class OrdersDAOFileImpl implements OrdersDAO{
 
 
     @Override
-    public List<Orders> getAllOrders() throws FilePersistenceException {
-        readOrders();
+    public List<Orders> getAllOrders(String date) throws FilePersistenceException {
+        String fileName = checkOrderDate(date);
+        readOrders(fileName);
         return new ArrayList<Orders>(allDateOrders.values());
     }
+
 }
 

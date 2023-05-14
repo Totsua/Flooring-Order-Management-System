@@ -47,7 +47,9 @@ public class UserIOConsoleImpl implements UserIO {
             return console.nextLine();
         }
 
-        /**
+
+
+    /**
          *
          * A simple method that takes in a message to display on the console,
          * and continually reprompts the user with that message until they enter an integer
@@ -216,5 +218,84 @@ public class UserIOConsoleImpl implements UserIO {
             } while (result < min || result > max);
             return result;
         }
+
+
+        // Reading Date/Month - adding a "0" if the date/month is lower than 10.
+    @Override
+    public String readDay(String prompt, int min, int max) {
+            int date;
+            do{
+                date = readInt(prompt);
+                if (date<min || date > max){
+                    this.print("Invalid Day. Please Try Again.");
+                }
+            } while (date<min || date > max);
+            String dateString = String.valueOf(date);
+            if (date < 10 ){
+                dateString = "0" + String.valueOf(date);
+            }
+        return dateString;
+    }
+
+    @Override
+    public String readMonth(String prompt, int min, int max) {
+        int month;
+        do{
+            month = readInt(prompt);
+            if (month<min || month > max){
+                this.print("Invalid Month. Please Try Again.");
+            }
+        } while (month < min || month > max);
+        String monthString = String.valueOf(month);
+        if (month < 10 ){
+            monthString = "0" + String.valueOf(month);
+        }
+        return monthString;
+    }
+    @Override
+    public String readYear(String prompt) {
+        int min = 2013;
+        int max = 2050;
+        int year;
+        do{
+            year = readInt(prompt);
+            if (year<min){
+                this.print("Invalid Year. Minimum Year: 2013.");
+            }
+            if ( year > max){
+                this.print("Invalid Year. Maximum Year: 2050.");
+            }
+        } while (year < min || year > max);
+        String yearString = String.valueOf(year);
+        return yearString;
+    }
+
+    // Method to confirm the users choice
+    @Override
+    public boolean readChoice(String prompt){
+        String input;
+        boolean isValidChar = false;
+        do {
+            input = this.readString(prompt +" (Y/N):");
+            if(input.trim().equalsIgnoreCase("Y")|| input.trim().equalsIgnoreCase("N")){
+                isValidChar = true;
+            } else {
+                System.out.println("Invalid Choice. Please Input 'Y' Or 'N'.");
+            }
+
+        } while(!isValidChar);
+        if (input.trim().equalsIgnoreCase("Y")){
+             return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public String readDate(String date){
+    return  null;
+    }
+
 }
 

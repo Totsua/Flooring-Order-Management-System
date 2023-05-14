@@ -1,8 +1,5 @@
 package com.company.controller;
 
-import com.company.dao.OrdersDAO;
-import com.company.dao.OrdersDAOFileImpl;
-import com.company.dao.ProductDAOFileImpl;
 import com.company.dao.FilePersistenceException;
 import com.company.model.Orders;
 import com.company.model.StateTaxes;
@@ -14,9 +11,8 @@ import java.util.List;
 
 public class FlooringMasteryController {
 
-// Controller should talk to the Service Layer not DAO
+    // Controller should talk to the Service Layer and View not DAO
     // The Service Layer is the ONLY component allowed to talk to the DAO
-
 
     private ObjectView view;
     private ProductServiceLayer service;
@@ -24,7 +20,6 @@ public  FlooringMasteryController(ProductServiceLayer service, ObjectView view){
     this.view = view;
     this.service = service;
 }
-OrdersDAOFileImpl ordersDAO = new OrdersDAOFileImpl();
 
 
 // Main Method of the Controller
@@ -37,7 +32,7 @@ public void run(){
             MenuChoice = getMenuSelect();
             switch (MenuChoice){
                 case 1:
-                    viewOrder(); // TESTING
+                    viewOrder(); // Display the Orders
                     break;
                 case 2:
                     break;
@@ -71,10 +66,26 @@ public void run(){
     private void exportMessage(){view.displayExportMessage();}
 
 
-private void viewOrder() throws FilePersistenceException{
-    List<Orders> ordersList = service.getAllOrders();
-    view.displayOrders(ordersList);
+private void viewOrder() throws FilePersistenceException {
+    // Ask user to input a date
+    String myDate= view.displayAskDate();
+    // If user doesn't confirm the date, go back to the main menu.
+    // If they do verify if the date is valid.
+    if (myDate != null) {
+        boolean dateValid = service.validDate(myDate);
+        // If the date is valid, check to see if there are orders for that given date.
+        if (dateValid) {
+            try {
+                List<Orders> ordersList = service.getAllOrders(myDate);
+                view.displayOrders(ordersList);
+            } catch (FilePersistenceException e){
+                // If there's no file print the error message
+                view.displayErrorMessage(e.getMessage());
+            }
+        }
+    }
 }
+
 
 
    private void viewProducts() throws FilePersistenceException {

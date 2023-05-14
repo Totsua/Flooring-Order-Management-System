@@ -4,6 +4,8 @@ import com.company.model.Orders;
 import com.company.model.Products;
 import com.company.model.StateTaxes;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class ObjectView {
@@ -27,6 +29,23 @@ public class ObjectView {
 
     // MENU MESSAGES
 
+    public String displayAskDate(){
+        io.print("What is the date of the order:");
+        String day = io.readDay("Please input the day of the order (DD): ",1,31);
+        String month = io.readMonth("Please input the month of the order (MM): ", 1,12);
+        String year = io.readYear("Please input the year of the order (YYYY): ");
+        String orderDate = month+"-" +day+ "-" + year;
+        boolean confirm = io.readChoice(orderDate+" (MM-DD-YYYY) is this correct?");
+        if (confirm){
+            return orderDate;
+        } else{
+            return null;
+        }
+
+    }
+
+
+
     // "Quit" menu option message
     public void displayExitMessage() {
         io.print("Thank You For Using This Service!");
@@ -39,27 +58,24 @@ public class ObjectView {
 
     // Error Message
     public void displayErrorMessage(String errorMessage){
-        io.print("******ERROR******");
+        io.print("* * * * * * * * * * * * * * ERROR * * * * * * * * * * * * * * * * * *");
         io.print(errorMessage);
     }
 
     // "Export All Data" message -(For the time being)
     public void displayExportMessage(){
-        io.print("******Feature Locked******");
+        io.print("* * * * * * Feature Locked * * * * * *");
         io.print("Please Wait Until The Next Patch");
     }
 
+    // Method to read through the order list, format it and display it
     public void displayOrders(List<Orders> orderList){
         for (Orders order: orderList){
-           // String orderInfo = String.format("Order No.%s, Customer: %s, State: %s, TaxRate: %s ls@  ")
             System.out.println("Order No."+order.getOrderNumber()+ ", Customer: "+ order.getCustomerName()+ ", State: "+order.getState()+
                     ", TaxRate: "+order.getStateTaxRate()+ "%, Product: " +order.getProductType()+", " +
                     "Area: "+order.getArea()+"SqFt, CostPerSqFt: $"+order.getCostPerSqFoot()+
                     ", LabourCostPerSqFt: $"+order.getLabourPerSqFoot()+", MaterialCost: $"+order.getMaterialCost()+
-                    ", LabourCost: $"+order.getLabourCost()+", Tax: $"+order.getTax()+", Total:$"+order.getTotal());
-                    //nteger orderNumber, String customerName, String state, BigDecimal stateTaxRate,
-            //                  String productType, BigDecimal area, BigDecimal costPerSqFoot, BigDecimal labourPerSqFoot,
-            //                  BigDecimal materialCost, BigDecimal labourCost, BigDecimal total)
+                    ", LabourCost: $"+order.getLabourCost()+", Tax: $"+order.getTax()+", Total: $"+order.getTotal());
         }
     }
 

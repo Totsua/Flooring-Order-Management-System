@@ -5,6 +5,7 @@ import com.company.model.Orders;
 import com.company.model.Products;
 import com.company.model.StateTaxes;
 
+import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public interface ProductServiceLayer {
@@ -14,6 +15,13 @@ public interface ProductServiceLayer {
 
     List<StateTaxes> getAllStateTaxes() throws
             FilePersistenceException;
-    List<Orders> getAllOrders() throws
+    List<Orders> getAllOrders(String date) throws
             FilePersistenceException;
+
+
+
+    boolean validDate(String date) throws
+            DateTimeParseException;
+
+
 }
