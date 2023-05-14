@@ -19,7 +19,10 @@ public interface ProductServiceLayer {
             FilePersistenceException;
     List<Orders> getAllOrders(String date) throws
             FilePersistenceException;
+    Orders getOrder(String date, int orderNumber) throws FilePersistenceException;
+    void removeOrder(String date, Orders wantedOrder) throws FilePersistenceException;
 
+    boolean verifyOrderNumber(String date, int orderNumber) throws FilePersistenceException;
     boolean createFileExists(String date) throws FilePersistenceException;
     boolean validateState(String state) throws FilePersistenceException;
     boolean validateProduct(String product) throws FilePersistenceException;

@@ -9,6 +9,8 @@ public interface OrdersDAO {
     boolean createFileExists(String date) throws FilePersistenceException;
     void newOrderNewFile(Orders order, String date) throws FilePersistenceException;
     void newOrderSameFile (Orders order, String date) throws FilePersistenceException;
+    public void removeOrder(String date, Orders order) throws FilePersistenceException;
+
 
     List<Orders> getAllOrders() throws FilePersistenceException;
 }

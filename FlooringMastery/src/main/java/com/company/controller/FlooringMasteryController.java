@@ -39,8 +39,10 @@ public void run(){
                     addOrder();
                     break;
                 case 3:
+                    //editOrder();
                     break;
                 case 4:
+                    removeOrder();
                     break;
                 case 5:
                     exportMessage();
@@ -90,6 +92,8 @@ private void viewOrder() throws FilePersistenceException {
     view.displayPauseMessage();
 }
 
+    // If I had more time I would validate all User Inputs.
+    // For the time being they will just go back to the main menu if an input is wrong.
     private void addOrder() throws FilePersistenceException {
     boolean validState;
     boolean validProduct;
@@ -126,7 +130,7 @@ private void viewOrder() throws FilePersistenceException {
                             fileExists = service.createFileExists(myDate);
                             service.createNewOrder(name, state, product, area, materialCost,
                                     labourCost, tax, total, myDate,fileExists);
-
+                            view.displayAddOrderSuccess();
                             }
                         }
                     }
@@ -139,6 +143,29 @@ private void viewOrder() throws FilePersistenceException {
 
 
 
+    private void removeOrder() throws FilePersistenceException {
+        view.displayRemoveOrderTitle();
+        String myDate = view.displayAskDate();
+        if (myDate != null) {
+            boolean dateValid = service.validDate(myDate);
+            if (dateValid) {
+                boolean fileExists = service.createFileExists(myDate);
+                if(fileExists){
+                    int orderNumber = view.askOrderNumber();
+                    boolean validOrderNum = service.verifyOrderNumber(myDate, orderNumber);
+                            if(validOrderNum){
+                                Orders wantedOrder = service.getOrder(myDate, orderNumber);
+                                boolean delete =view.displayWantedOrder(wantedOrder);
+                                if (delete){
+                                    service.removeOrder(myDate,wantedOrder);
+                                    view.displayRemoveSuccessMessage();
+                                }
+                            }
+                }
+            }
+        }
+        view.displayPauseMessage();
+    }
    private void viewProducts() throws FilePersistenceException {
        List<Products>  ProductList = service.getAllProducts();
        view.displayProductList(ProductList);

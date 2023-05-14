@@ -43,10 +43,43 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         return dao3.getAllOrders(date);
     }
 
+    // Get an individual Order
+    @Override
+    public Orders getOrder(String date, int orderNumber) throws FilePersistenceException{
+        dao3.getAllOrders(date);
+        Orders wantedOrder = null;
+        List<Orders> ordersList = getAllOrders(date);
+        for (Orders order: ordersList){
+            if (order.getOrderNumber() == orderNumber){
+                wantedOrder =order;
+            }
+        }
+        return wantedOrder;
+    }
+
+    @Override
+    public void removeOrder(String date, Orders order) throws FilePersistenceException {
+        dao3.removeOrder(date,order);
+    }
+
     @Override
     public boolean createFileExists(String date)throws FilePersistenceException{
         boolean exist = dao3.createFileExists(date);
         return exist;
+    }
+
+    // Verifying a given order number
+    @Override
+    public boolean verifyOrderNumber(String date, int orderNumber) throws FilePersistenceException{
+        dao3.getAllOrders(date);
+        boolean isValid = false;
+        List<Orders> ordersList = getAllOrders(date);
+        for (Orders order: ordersList){
+            if (order.getOrderNumber() == orderNumber){
+                isValid = true;
+            }
+        }
+        return isValid;
     }
 
     // Creating a new Orders Object -
@@ -93,9 +126,6 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         else{
             Orders newOrder = new Orders( 1,name, state, stateTaxRate, product, trueArea, costPerSqFt, labourPerSqFt,
                     materialCost, labourCost, tax, total);
-            //Integer orderNumber, String customerName, String state, BigDecimal stateTaxRate,
-            //                  String productType, BigDecimal area, BigDecimal costPerSqFoot, BigDecimal labourPerSqFoot,
-            //                  BigDecimal materialCost, BigDecimal labourCost, BigDecimal tax, BigDecimal total)
             dao3.newOrderNewFile(newOrder,date);
         }
 

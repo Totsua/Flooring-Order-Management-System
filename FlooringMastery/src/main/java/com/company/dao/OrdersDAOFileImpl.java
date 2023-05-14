@@ -34,13 +34,7 @@ public class OrdersDAOFileImpl implements OrdersDAO {
     @Override
     public void newOrderNewFile(Orders order, String date) throws FilePersistenceException {
         allDateOrders.put(order.getOrderNumber(), order);
-
-        String[] splitDate = date.split(DELIMITER);
-        String month = splitDate[0];
-        String day = splitDate[1];
-        String year = splitDate[2];
-        String dateFormat = month + day + year;
-        String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_" + dateFormat + ".txt";
+        String fileName = createFileName(date);
         writeOrders(fileName);
 
     }
@@ -57,30 +51,20 @@ public class OrdersDAOFileImpl implements OrdersDAO {
 
     @Override
     public void newOrderSameFile (Orders order, String date) throws FilePersistenceException{
-        //String fileName = createFileName(date);
-        String[] splitDate = date.split(DELIMITER);
-        String month = splitDate[0];
-        String day = splitDate[1];
-        String year = splitDate[2];
-        String dateFormat = month + day + year;
-        String fileName = "FlooringMastery-WileyEdge/FlooringMastery/SampleFileData/Orders/Orders_" + dateFormat + ".txt";
-        //writeOrders(fileName);
+        String fileName = createFileName(date);
         readOrders(fileName);
         allDateOrders.put(order.getOrderNumber(), order);
-        PrintWriter out;
-
-        try {
-            out = new PrintWriter(new FileWriter(fileName));
-        } catch (IOException e) {
-            throw new FilePersistenceException("Could Not Save Order Data", e);
-        }
-            // Write the title line first into the file
-            out.println(FILETITLELINE);
-            // Force PrintWriter to write the line to the file
-            out.flush();
-        out.close();
         writeOrders(fileName);
     }
+
+    @Override
+    public void removeOrder(String date, Orders order) throws FilePersistenceException {
+        String fileName = createFileName(date);
+        readOrders(fileName);
+        allDateOrders.remove(order.getOrderNumber());
+        writeOrders(fileName);
+    }
+
 
     // Method to read the Orders from a file
     public void readOrders(String fileName) throws FilePersistenceException {
@@ -119,7 +103,7 @@ public class OrdersDAOFileImpl implements OrdersDAO {
         } catch (IOException e) {
             throw new FilePersistenceException("Could Not Save Order Data", e);
         }
-
+        out.println(FILETITLELINE);
         String orderAsText;
         List<Orders> allOrders = this.getAllOrders();
         for (Orders order : allOrders) {

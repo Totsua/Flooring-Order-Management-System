@@ -61,6 +61,28 @@ public class ObjectView {
         return io.readChoice("Do You Want To Place The Order?");
     }
 
+    public void displayAddOrderSuccess(){
+        io.print("* * * * * * * * * * * Order Added Successfully  * * * * * * * * * * * *");
+    }
+
+
+    public void displayRemoveOrderTitle(){
+        io.print("* * * * * * * * * * * * Remove An Order * * * * * * * * * * * * * * * *");
+    }
+    public void displayRemoveSuccessMessage(){
+        io.print("* * * * * * * * * * * * Remove Successful * * * * * * * * * * * * * * * *");
+    }
+    public boolean displayWantedOrder(Orders order){
+        System.out.println("Order No."+order.getOrderNumber()+ ", Customer: "+ order.getCustomerName()+ ", State: "+order.getState()+
+                ", TaxRate: "+order.getStateTaxRate()+ "%, Product: " +order.getProductType()+", " +
+                "Area: "+order.getArea()+"SqFt, CostPerSqFt: $"+order.getCostPerSqFoot()+
+                ", LabourCostPerSqFt: $"+order.getLabourPerSqFoot()+", MaterialCost: $"+order.getMaterialCost()+
+                ", LabourCost: $"+order.getLabourCost()+", Tax: $"+order.getTax()+", Total: $"+order.getTotal());
+        return io.readChoice("Do You Wish To Remove This Order? ");
+    }
+    public int askOrderNumber(){
+       return io.readInt("Please Input The Order Number You Wish To Remove: ");
+    }
 
     // "Quit" menu option message
     public void displayExitMessage() {
