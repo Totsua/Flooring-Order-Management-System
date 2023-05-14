@@ -44,6 +44,7 @@ public class Orders {
     }
 
     // Getters and Setters
+
     public Integer getOrderNumber() {
         return orderNumber;
     }
@@ -124,9 +125,13 @@ public class Orders {
         this.labourCost = labourCost;
     }
 
-    public BigDecimal getTax() {return tax;}
+    public BigDecimal getTax() {
+        return tax;
+    }
 
-    public void setTax(BigDecimal tax) {this.tax = tax;}
+    public void setTax(BigDecimal tax) {
+        this.tax = tax;
+    }
 
     public BigDecimal getTotal() {
         return total;
@@ -134,5 +139,13 @@ public class Orders {
 
     public void setTotal(BigDecimal total) {
         this.total = total;
+    }
+
+    public String getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
     }
 }

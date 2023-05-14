@@ -124,8 +124,9 @@ private void viewOrder() throws FilePersistenceException {
                         // Check if file already exists
                         if(orderConfirm){
                             fileExists = service.createFileExists(myDate);
-                            service.createNewOrder(name, product, state, area, materialCost,
+                            service.createNewOrder(name, state, product, area, materialCost,
                                     labourCost, tax, total, myDate,fileExists);
+
                             }
                         }
                     }

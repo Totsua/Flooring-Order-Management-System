@@ -54,6 +54,9 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
     @Override
     public void createNewOrder(String name, String state, String product, Double area, BigDecimal materialCost,
                                BigDecimal labourCost, BigDecimal tax, BigDecimal total, String date, boolean exists)
+    //Integer orderNumber, String customerName, String state, BigDecimal stateTaxRate,
+    //                  String productType, BigDecimal area, BigDecimal costPerSqFoot, BigDecimal labourPerSqFoot,
+    //                  BigDecimal materialCost, BigDecimal labourCost, BigDecimal tax, BigDecimal total)
             throws FilePersistenceException
     {
         BigDecimal stateTaxRate = null;
@@ -80,6 +83,9 @@ public class ProductServiceLayerImpl implements ProductServiceLayer {
         else{
             Orders newOrder = new Orders( 1,name, state, stateTaxRate, product, trueArea, costPerSqFt, labourPerSqFt,
                     materialCost, labourCost, tax, total);
+            //Integer orderNumber, String customerName, String state, BigDecimal stateTaxRate,
+            //                  String productType, BigDecimal area, BigDecimal costPerSqFoot, BigDecimal labourPerSqFoot,
+            //                  BigDecimal materialCost, BigDecimal labourCost, BigDecimal tax, BigDecimal total)
             dao3.newOrderNewFile(newOrder,date);
         }
 
