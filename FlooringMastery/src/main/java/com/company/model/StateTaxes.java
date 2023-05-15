@@ -21,9 +21,8 @@ public class StateTaxes {
         allStateTaxes.put(stateAlphaCode, this);
     }
 
-    // Getters - Taxes is a READ ONLY file that won't be modified
-    // So we only need Getters no Setters
-    // Potentially may need Setters for Orders?
+    // Getters no Setters - Taxes is a READ ONLY file that won't be modified
+
 
     public String getStateAlphaCode() {
         return stateAlphaCode;

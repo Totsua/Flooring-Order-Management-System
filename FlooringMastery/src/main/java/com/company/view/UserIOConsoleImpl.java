@@ -1,8 +1,6 @@
 package com.company.view;
-import java.math.BigDecimal;
+
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 // Console Implementation from Wiley Class Roster Exercise
 
@@ -210,8 +208,14 @@ public class UserIOConsoleImpl implements UserIO {
         return result;
     }
 
+        /*
+        * My methods that I added
+        * */
 
-    // Reading Date/Month - adding a "0" if the date/month is lower than 10.
+
+    // Reading Date - adding a "0" if the date is lower than 10.
+    // Also using "readInt" (above) to verify the input is a number between min and max
+    // Returning the String of Date
     @Override
     public String readDay(String prompt, int min, int max) {
         int date;
@@ -223,11 +227,14 @@ public class UserIOConsoleImpl implements UserIO {
         } while (date < min || date > max);
         String dateString = String.valueOf(date);
         if (date < 10) {
-            dateString = "0" + String.valueOf(date);
+            dateString = "0" + date;
         }
         return dateString;
     }
 
+    // Reading Month - adding a "0" if the month is lower than 10.
+    // Also using "readInt" (above) to verify the input is a number between min and max
+    // Returning the String of Month
     @Override
     public String readMonth(String prompt, int min, int max) {
         int month;
@@ -239,25 +246,25 @@ public class UserIOConsoleImpl implements UserIO {
         } while (month < min || month > max);
         String monthString = String.valueOf(month);
         if (month < 10) {
-            monthString = "0" + String.valueOf(month);
+            monthString = "0" + month;
         }
         return monthString;
     }
 
+    // Reading the year - Verifying that the year is YYYY format
+    // Also using (readInt) to verify the input is a number
+    // Returning the String of Year
     @Override
     public String readYear(String prompt) {
-        int min = 2013;
-        int max = 2050;
         int year;
         do {
             year = readInt(prompt);
-            if (year < min) {
-                this.print("Invalid Year. Minimum Year: 2013.");
+            if (String.valueOf(year).length()!=4){
+                System.out.println("Invalid format.");
             }
-            if (year > max) {
-                this.print("Invalid Year. Maximum Year: 2050.");
-            }
-        } while (year < min || year > max);
+        }
+           while(String.valueOf(year).length() !=4);
+
         String yearString = String.valueOf(year);
         return yearString;
     }
@@ -269,6 +276,7 @@ public class UserIOConsoleImpl implements UserIO {
         boolean isValidChar = false;
         do {
             input = this.readString(prompt + " (Y/N):");
+            // We only want a "Y","y" or "N", "n"
             if (input.trim().equalsIgnoreCase("Y") || input.trim().equalsIgnoreCase("N")) {
                 isValidChar = true;
             } else {
@@ -276,22 +284,24 @@ public class UserIOConsoleImpl implements UserIO {
             }
 
         } while (!isValidChar);
-        if (input.trim().equalsIgnoreCase("Y")) {
-            return true;
-        } else {
-            return false;
-        }
+        // Checking and return true or false
+        // At this point it can only be y or n
+        return input.trim().equalsIgnoreCase("Y");
     }
+
+    // Verifying the customer name follows the rules
+    // Returns the name
 
     @Override
     public String readName(String prompt) {
         boolean isValid = true;
-        String name = "";
+        String name;
         do {
             name = readString(prompt);
             isValid = true;
-            for (Character x : name.toCharArray()) { // STILL DOES NOT ALLOW "."'S
-                if (!Character.isLetterOrDigit(x) && !(Character.isWhitespace(x)) && !(x.equals("."))) {
+            // Checking to see if the name validates the requirements
+            for (Character x : name.toCharArray()) {
+                if (!Character.isLetterOrDigit(x) && !(Character.isWhitespace(x)) && x != '.') {
                     System.out.println("Invalid Character: " + x);
                     isValid = false;
                 }
@@ -300,8 +310,56 @@ public class UserIOConsoleImpl implements UserIO {
         return name;
     }
 
+    // Method to read the Edited Order name
     @Override
-    public double readDouble(String prompt, double min){
+    public String readName(String prompt, String oldName) {
+        boolean isValid = true;
+        String name = "";
+        do {
+            name = readString(prompt + "\nOr Enter 1.");
+            isValid = true;
+            // Checking if the new name follows the rules
+            for (Character x : name.toCharArray()) { // STILL DOES NOT ALLOW "."'S
+                if (!Character.isLetterOrDigit(x) && !(Character.isWhitespace(x)) && x != '.')  {
+                    System.out.println("Invalid Character: " + x);
+                    isValid = false;
+                }
+                // If the user enters 1, return the original name
+                else if(name.trim().equals("1")){
+                    name = oldName;
+                }
+            }
+        }while (!isValid);
+        return name;
+    }
+
+    // Method for checking when the user edits an order, to check if the edited parameter
+    // is valid in terms of no numbers, OR if the only input is a "1" then the original
+    // parameter is returned
+    @Override
+    public String readEditParameter(String prompt, String oldParameter) {
+        boolean isValid = true;
+        String input = "";
+        do {
+            input = readString(prompt + "\nOr Enter 1.");
+            isValid = true;
+            for (Character x : input.toCharArray()) {
+                if (!Character.isLetter(x)) {
+                    isValid = false;
+                    // If the user inputted "1", return the old parameter
+                    if (input.trim().equalsIgnoreCase("1")) {
+                        input = oldParameter;
+                        isValid = true;
+                    }
+                }
+            }
+        }while (!isValid);
+        return input;
+    }
+
+    // Method to verify if the user inputs a valid number that is above the min
+    // For the Area the min is required to be 100 - (Could be HardCoded)
+    public double readArea(String prompt, double min){
         double result;
         do {
             result = readDouble(prompt);

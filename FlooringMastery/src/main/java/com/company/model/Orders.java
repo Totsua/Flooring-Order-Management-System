@@ -1,9 +1,6 @@
 package com.company.model;
-
+// Unsure if "model" should contain dto and dao or both
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Orders {
     private Integer orderNumber;
@@ -18,7 +15,6 @@ public class Orders {
     private BigDecimal labourCost;
     private BigDecimal tax;
     private BigDecimal total;
-    public static Map <String, Orders> allOrdersPerDate = new HashMap<>();
 
     // Constructor
 

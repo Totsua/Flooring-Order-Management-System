@@ -1,0 +1,5 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+1,Yoshi,TX,4.45,Laminate,200.00,1.75,2.10,350.00,420.00,34.27,804.27
+2,Birdo,TX,4.45,Tile,200.00,3.50,4.15,700.00,830.00,68.09,1598.09
+3,Baby Luigi,KY,6.00,Tile,200.00,3.50,4.15,700.00,830.00,91.80,1621.80
+4,INVADER JIM,CA,25.00,Carpet,4000,2.25,2.10,9000.00,8400.00,4350.00,21750.00

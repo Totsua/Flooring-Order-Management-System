@@ -1,0 +1,4 @@
+OrderNumber,CustomerName,State,TaxRate,ProductType,Area,CostPerSquareFoot,LaborCostPerSquareFoot,MaterialCost,LaborCost,Tax,Total
+1,Kyle Gass,WA,9.25,Laminate,100.00,1.75,2.10,175.00,210.00,35.61,420.61
+2,J B,CA,25.00,Carpet,1000,2.25,2.10,2250.00,2100.00,1087.50,5437.50
+3,Destiny Pick,KY,6.00,Carpet,2090.00,2.25,2.10,4702.50,4389.00,545.49,9636.99

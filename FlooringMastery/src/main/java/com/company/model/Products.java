@@ -22,7 +22,6 @@ public class Products {
     }
 
     // Getters no Setters, Products are a READ ONLY file
-    // Potentially may need Setters for Orders?
 
     public String getProductType() {
         return productType;
