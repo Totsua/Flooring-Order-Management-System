@@ -1,3 +1,3 @@
-# FlooringMastery-WileyEdge
+# Flooring-Order-Management-System
   -- Shamar Woodbyrne --
-Course Project: Flooring Mastery
+Course Project: Flooring-Order-Management-System
